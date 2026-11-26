@@ -132,18 +132,6 @@ O catálogo de sabores apresentado possui caráter ilustrativo.
 
 Antes de uma implantação real, é necessário validar o catálogo, os procedimentos operacionais, a segurança e os requisitos legais aplicáveis.
 
-## Possibilidades de evolução
-
-- [ ] Desenvolvimento de backend e API REST.
-- [ ] Integração com banco de dados.
-- [ ] Autenticação de usuários.
-- [ ] Controle de permissões.
-- [ ] Sincronização entre dispositivos.
-- [ ] Relatórios gerenciais.
-- [ ] Indicadores de perdas e desperdícios.
-- [ ] Integração com leitores de código de barras.
-- [ ] Estratégia de backup e recuperação de dados.
-
 ## Contexto acadêmico
 
 Desenvolvido como protótipo para o **Desafio SENAI #13100**, com foco no controle visual de estoque e validade de polpas de frutas.
