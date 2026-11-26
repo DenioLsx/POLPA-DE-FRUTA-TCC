@@ -145,7 +145,7 @@ function buildGallery() {
     b.setAttribute('aria-label', f[1]);
 
     let wall = el('img', 'wall');
-    wall.src = `assets/${f[0]}-wall.svg`;
+    wall.src = `assets/${f[0]}-wall.jpg`;
     wall.alt = '';
 
     let copy = el('div', 'panel-copy');
