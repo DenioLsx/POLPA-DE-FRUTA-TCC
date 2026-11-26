@@ -1,0 +1,158 @@
+
+<!doctype html>
+<html lang="pt-BR">
+
+<!-- Configurações iniciais da página, título, folha de estilo e carregamento do JS -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Protótipo acadêmico de gestão de estoque e validade de polpas.">
+    <title>Polpas de frutas| Câmara fria</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <!-- Atalho de teclado para pular direto pro conteúdo principal -->
+    <a class="skip" href="#main">Ir ao conteúdo</a>
+
+    <!-- Barra do topo com botão de menu, contador de avisos (#badge) e nome do sistema -->
+    <header>
+        <button id="menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">☰ <span id="badge"></span></button>
+        <div class="brand">POLPAS DE FRUTAS <small> / CÂMARA FRIA</small></div>
+        <span class="local">ARMAZENAMENTO LOCAL</span>
+    </header>
+
+    <!-- Menu lateral/suspenso com os botões que trocam de tela -->
+    <nav id="nav" hidden aria-label="Navegação">
+        <button data-page="home">Início</button>
+        <button data-page="moves">Movimentações</button>
+        <button data-page="history">Histórico</button>
+        <button data-page="expiry" id="expiryNav" hidden>Validade</button>
+        <button data-page="info">Privacidade e termos</button>
+    </nav>
+
+    <!-- Área central onde cada <section> representa uma tela diferente do sistema -->
+    <main id="main" tabindex="-1">
+
+        <!-- Tela inicial: título, galeria de sabores e dica de navegação -->
+        <section id="home">
+            <div class="heading">
+                <h1>Polpas de frutas<span>.</span></h1>
+                <p id="greeting"></p>
+                <p class="eyebrow">— ESTOQUE —</p>
+            </div>
+            <div id="gallery" class="gallery"></div>
+            <p class="hint">Explore os sabores com o cursor ou toque. Use Tab e Enter pelo teclado.</p>
+        </section>
+
+        <!-- Tela de movimentações: botões grandes para dar entrada ou saída e resumo dos totais -->
+        <section id="moves" hidden>
+            <div class="heading">
+                <p class="eyebrow">OPERAÇÃO</p>
+                <h1>Movimentações</h1>
+                <p>Registre entradas e saídas por lote.</p>
+            </div>
+            <div class="actions">
+                <button class="operation green" id="entry">＋<strong>Entrada</strong><span>Receber polpas</span></button>
+                <button class="operation red" id="exit">−<strong>Saída</strong><span>Retirar polpas</span></button>
+            </div>
+            <div id="totals" class="totals"></div>
+        </section>
+
+        <!-- Tela de histórico: onde o JS monta as listas de movimentações -->
+        <section id="history" hidden>
+            <div class="heading">
+                <p class="eyebrow">RASTREABILIDADE</p>
+                <h1>Histórico</h1>
+                <p>Registro das movimentações locais.</p>
+            </div>
+            <div class="columns" id="historyLists"></div>
+        </section>
+
+        <!-- Tela de validade: exibe os alertas de polpas próximas do vencimento -->
+        <section id="expiry" hidden>
+            <div class="heading">
+                <p class="eyebrow">PREVENÇÃO</p>
+                <h1>Controle de validade</h1>
+                <p>Alertas a partir de 10 dias. Ciência não elimina o risco.</p>
+            </div>
+            <div id="alerts"></div>
+        </section>
+
+        <!-- Tela de privacidade e termos -->
+        <section id="info" hidden>
+            <div class="heading">
+                <h1>Privacidade e termos</h1>
+            </div>
+            <article class="surface">
+                <h2>Privacidade</h2>
+                <p>Este protótipo não solicita dados pessoais, não utiliza cookies, rastreadores ou serviços externos. Os registros de produtos, lotes, datas e quantidades são armazenados no navegador. Não insira dados pessoais nos campos. O armazenamento pode ser apagado nas configurações do navegador.</p>
+
+                <h2>Termos de uso</h2>
+                <p>Protótipo acadêmico para avaliação. Não substitui conferência física, rotulagem, procedimentos sanitários ou controles oficiais. Não há vendas, pagamentos ou reembolsos. A marca identifica o contexto do desafio, sem afirmar vínculo oficial. Catálogo ilustrativo. Ilustrações originais do projeto.</p>
+
+                <h2>Antes de uso real</h2>
+                <p>Validar catálogo, responsável legal, contato, política de retenção, segurança, permissões, sincronização e procedimentos com a empresa. A conformidade LGPD e WCAG não é certificada.</p>
+            </article>
+        </section>
+
+    </main>
+
+    <!-- Rodapé fixo com identificação do desafio e link para privacidade e termos -->
+    <footer>
+        <span class="signature">POLPAS DE FRUTAS</span>
+        <span class="footer-divider">·</span>
+        Gestão inteligente de estoque
+        <button data-page="info">Privacidade e termos</button>
+    </footer>
+
+    <!-- Janela modal com o formulário de entrada e saída de polpas -->
+    <dialog id="modal">
+        <form id="movement">
+            <div class="dialoghead">
+                <h2 id="modalTitle"></h2>
+                <button type="button" id="close" aria-label="Fechar">×</button>
+            </div>
+
+            <label>Polpa<select id="fruit" required></select></label>
+            <label>Quantidade (unidades)<input id="qty" type="number" min="1" max="1000000" step="1" required></label>
+
+            <!-- Campos exclusivos para registrar entrada de lote -->
+            <div id="entryFields">
+                <label>Data de recebimento<input id="received" type="date"></label>
+
+                <label>Modo de validade
+                    <select id="mode">
+                        <option value="days">Prazo restante em dias</option>
+                        <option value="date">Data impressa na embalagem</option>
+                    </select>
+                </label>
+
+                <label id="daysLabel">Prazo restante (dias)<input id="days" type="number" min="0" max="3650" step="1"></label>
+                <label id="dateLabel" hidden>Vencimento<input id="date" type="date"></label>
+            </div>
+
+            <!-- Campos exclusivos para registrar saída ou descarte de lote -->
+            <div id="exitFields" hidden>
+                <label>Motivo
+                    <select id="reason">
+                        <option value="normal">Saída regular (FEFO)</option>
+                        <option value="discard">Descarte de vencidos</option>
+                    </select>
+                </label>
+
+                <label>Seleção de lote<select id="lot"><option value="auto">Sugestão automática</option></select></label>
+            </div>
+
+            <div id="preview" class="surface" aria-live="polite"></div>
+            <p id="error" role="alert"></p>
+            <button id="confirm" class="primary" type="submit">Confirmar movimentação</button>
+        </form>
+    </dialog>
+
+    <!-- Caixa de aviso rápido (toast) no canto da tela -->
+    <div id="toast" role="status" aria-live="polite"></div>
+</body>
+
+</html>
